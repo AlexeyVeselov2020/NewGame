@@ -1,0 +1,27 @@
+﻿<Window x:Class="WpfApp2.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        x:Name="startWindow"
+        Title="GameName" Height="450" Width="400">
+    <Window.Background>
+        <ImageBrush ImageSource="Themes/EasyTheme.jpg" Stretch="Fill" Opacity="0.7" x:Name="IB"/>
+    </Window.Background>
+    <Grid x:Name="StartGrid">
+        <StackPanel>
+            <Border MinWidth="200" Margin="50" MaxWidth="250" Padding="10"  VerticalAlignment="Top" Background="White" CornerRadius="20">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
+                </Border.Effect>
+                <TextBlock Text="GameName" TextAlignment="Center" FontSize="30" Margin="10"/>
+            </Border>
+            <ComboBox x:Name="complexityBox" materialDesign:HintAssist.Hint="Выберите сложность" MaxHeight="40" MaxWidth="300" Margin="60,0,60,0" Background="Azure"/>
+            <TextBox x:Name="nameBox" materialDesign:HintAssist.Hint="Введите имя" HorizontalAlignment="Left" MaxHeight="40" MaxWidth="300" Background="Azure" Margin="60,30,0,0" TextWrapping="Wrap" Width="140"/>
+            <Button x:Name="startButton" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="150" MinHeight="40" MinWidth="150" MaxHeight="40" Margin="60,70,60,0" Click="StartButton_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
