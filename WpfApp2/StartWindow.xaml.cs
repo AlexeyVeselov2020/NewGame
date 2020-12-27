@@ -52,8 +52,8 @@ namespace WpfApp2
             {
                 if(complexityBox.SelectedItem!=null)
                 {
-                    var correntPlayer = new Player(nameBox.Text, complexityBox.SelectedItem.ToString());
-                    var taskWindow = new MainWindow(correntPlayer);
+                    Player.SetValues(nameBox.Text, complexityBox.SelectedItem.ToString());
+                    var taskWindow = new MainWindow();
                     this.Close();
                     taskWindow.Show();
                 }

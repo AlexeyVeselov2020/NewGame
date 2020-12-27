@@ -8,9 +8,9 @@ namespace WpfApp2
 {
     public class Bond : IValuablePieceOfPaper
     {
-        public const double MaxQuantity = 1000000;
-        public const double MinPercent = 1;
-        public const double MaxPercent = 7;
+        private const double maxQuantity = 1000000;
+        private const double minPercent = 1;
+        private static double maxPercent = 7;
         public string Name { get; set; }
         public double Quantity { get; set; }
         public double Price { get; set; }
@@ -18,16 +18,26 @@ namespace WpfApp2
         public double Percent { get; set; }
         public bool Bankrupt { get; set; }
 
-        public Bond(string name)
+        public Bond(Market market)
         {
             Quantity = TotalValue = 0;
             Price = 1;
-            Name = name;
             Bankrupt = false;
             var random = new Random();
-            Percent = random.Next((int)MinPercent, (int)MaxPercent);
+            int index = 0;
+            do index = random.Next(0, market.CountryNames.Count - 1); while (market.CountryNames[index].isTaken);
+            Name = market.CountryNames[index].Value;
+            market.CountryNames.RemoveAt(index);
+            market.CountryNames.Add(new Name(Name, true));
+            Percent = random.Next((int)minPercent, (int)maxPercent);
+            if (Player.Difficulty == 0)
+                maxPercent = 7;
+            if (Player.Difficulty == 1)
+                maxPercent = 6;
+            if (Player.Difficulty == 2)
+                maxPercent = 4;
         }
-        public Bond(string name,double quantity, double percent)
+        public Bond(string name, double quantity, double percent)
         {
             Quantity = TotalValue = quantity;
             Price = 1;
@@ -35,9 +45,13 @@ namespace WpfApp2
             Bankrupt = false;
             Percent = percent;
         }
+        public IValuablePieceOfPaper CreateAPair(double quantity)
+        {
+            return new Bond(Name, quantity, Percent);
+        }
         public override string ToString()
         {
-            return string.Format("{0} {1}", Name, Percent);
+            return Name; // изменил
         }
         public void Renew(Market market)
         {

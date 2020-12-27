@@ -20,25 +20,21 @@ namespace WpfApp2
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Player correntPlayer { get; set; }
         public IEnumerable<IValuablePieceOfPaper> Ownings { get; }
-        public MainWindow(Player player)
+        public MainWindow()
         {
-            correntPlayer = player;
-            Ownings = player.Ownings;
+            Ownings = Player.Ownings;
             InitializeComponent();
 
-            correntPlayer = player;
-            StringBuilder style = new StringBuilder(correntPlayer.Difficulty);
-            switch (style.ToString())
+            switch (Player.Difficulty)
             {
-                case "Normal":
+                case 1:
                     IB.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Themes/NormalTheme.jpg"));
                     break;
-                case "Easy":
+                case 0:
                     IB.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Themes/EasyTheme.jpg"));
                     break;
-                case "Hard":
+                case 2:
                     IB.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Themes/HardTheme.jpg"));
                     break;
                 default:

@@ -14,26 +14,56 @@ namespace WpfApp2
         string Name { get; set; }
         string ToString();
         void Renew(Market market);
+
         bool Bankrupt { get; set; }
+        IValuablePieceOfPaper CreateAPair(double quantity);
     }
 
     public class Stock : IValuablePieceOfPaper
     {
-        const double MinQuantity = 100;
-        const double MaxQuantity = 100000;
+        private static double minQuantity = 500;
+        private static double maxQuantity = 10000;
         const double Multiplication = 10000000;
         public string Name { get; set; }
         public double Price { get; set; }
         public double Quantity { get; set; }
         public double TotalValue { get; set; }
         public bool Bankrupt { get; set; }
+        public Stock(Market market)
+        {
+            var random = new Random();
+            int index = 0;
+            do index = random.Next(0, market.CompanyNames.Count - 1); while (market.CompanyNames[index].isTaken);
+            Name = market.CompanyNames[index].Value;
+            market.CompanyNames.RemoveAt(index);
+            market.CompanyNames.Add(new Name(Name, true));
+            Quantity = random.Next((int)minQuantity, (int)maxQuantity);
+            Price = Multiplication / Quantity;
+            TotalValue = Quantity * Price;
+            Bankrupt = false;
+            if (Player.Difficulty == 0)
+            {
+                minQuantity = 500;
+                maxQuantity = 50000; // MAX = 20k, MIN = 200
+            }
+            if (Player.Difficulty == 1)
+            {
+                minQuantity = 500;
+                maxQuantity = 10000; // MAX = 20k, MIN = 1k
+            }
+            if (Player.Difficulty == 2)
+            {
+                minQuantity = 1000;
+                maxQuantity = 10000; // MAX = 10k, MIN = 1k
+            }
+        }
         public Stock(string name)
         {
             var random = new Random();
-            Quantity = random.Next((int)MinQuantity, (int)MaxQuantity);
+            Name = name;
+            Quantity = random.Next((int)minQuantity, (int)maxQuantity);
             Price = Multiplication / Quantity;
             TotalValue = Quantity * Price;
-            Name = name;
             Bankrupt = false;
         }
         public Stock(string name, double quantity, double price)
@@ -44,16 +74,20 @@ namespace WpfApp2
             TotalValue = Quantity * Price;
             Bankrupt = false;
         }
+        public IValuablePieceOfPaper CreateAPair(double quantity)
+        {
+            return new Stock(Name, quantity, Price);
+        }
         public override string ToString()
         {
-            return string.Format("{0}", Name);
+            return Name; // изменил
         }
         public void Renew(Market market)
         {
             if (market.MarketPapers.Contains(this))
             {
                 var random = new Random();
-                Quantity = random.Next((int)MinQuantity, (int)MaxQuantity);
+                Quantity = random.Next((int)minQuantity, (int)maxQuantity);
                 Price = Multiplication / Quantity;
                 TotalValue = Quantity * Price;
             }
@@ -62,7 +96,7 @@ namespace WpfApp2
         }
         private void SearchForMarketPrice(Market market)
         {
-            foreach(var s in market.MarketPapers)
+            foreach (var s in market.MarketPapers)
             {
                 if (s.Name == Name)
                 {

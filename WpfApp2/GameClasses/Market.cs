@@ -6,51 +6,91 @@ using System.Threading.Tasks;
 
 namespace WpfApp2
 {
+    public struct Name
+    {
+        public string Value;
+        public bool isTaken;
+        public Name(string s, bool b)
+        {
+            Value = s;
+            isTaken = b;
+        }
+    }
     public class Market
     {
         public List<IValuablePieceOfPaper> MarketPapers = new List<IValuablePieceOfPaper>();
-        public List<string> BankNames = Names.BankNames();
-        public List<string> CompanyNames = Names.CompanyNames();
-        public List<string> CountryNames = Names.CountryNames();
+        public List<Name> BankNames = new List<Name>();
+        public List<Name> CompanyNames = new List<Name>();
+        public List<Name> CountryNames = new List<Name>();
+        public Market()
+        {
+            var helpList = Names.BankNames();
+
+            for (int i = 0; i < helpList.Count; i++)
+                BankNames.Add(new Name(helpList[i], false));
+            helpList = Names.CompanyNames();
+
+            for (int i = 0; i < helpList.Count; i++)
+                CompanyNames.Add(new Name(helpList[i], false));
+            helpList = Names.CountryNames();
+
+            for (int i = 0; i < helpList.Count; i++)
+                CountryNames.Add(new Name(helpList[i], false));
+        }
         public void RenewAll()
         {
-            foreach(var p in MarketPapers)
-                p.Renew(this);            
+            foreach (var p in MarketPapers)
+                p.Renew(this);
+
         }
-        public void Fill(Player player)
+        public void Fill() // фабричный метод?
         {
-            MarketPapers.Clear();           
-            foreach (var p in player.Ownings)
+            MarketPapers.Clear();
+            var deplorables = new List<string>();
+            for (int i = 0; i < CompanyNames.Count; i++)
             {
-                if (p is Stock)
-                    MarketPapers.Add(new Stock(p.Name));
+                if (CompanyNames[i].isTaken)
+                {
+                    var stock = Player.Ownings.Find(a => a.Name == CompanyNames[i].Value);
+                    if (stock == null)
+                        deplorables.Add(CompanyNames[i].Value);
+                    else
+                        MarketPapers.Add(new Stock(stock.Name));
+                }
             }
-            var random = new Random();
-            var numbers = new List<int>();
-            while(numbers.Count < 15)
+            for (int i = 0; i < deplorables.Count; i++)
             {
-                int number = random.Next(0, BankNames.Count - 1);
-                if (!numbers.Contains(number))
-                    numbers.Add(number);
+                CompanyNames.Remove(new Name(deplorables[i], true));
+                CompanyNames.Add(new Name(deplorables[i], false));
             }
-            for (int i = 0; i < 15 - MarketPapers.Count; i++)
+            ChangeList(BankNames);
+            ChangeList(CountryNames);
+            Random random = new Random();
+            while (MarketPapers.Count < 45)
             {
-                MarketPapers.Add(new Stock(CompanyNames[numbers[i]]));
+                int choice = random.Next(0, 2);
+                if (choice == 0)
+                    MarketPapers.Add(new Stock(this));
+                if (choice == 1)
+                    MarketPapers.Add(new Deposit(this));
+                if (choice == 2)
+                    MarketPapers.Add(new Bond(this));
             }
-            foreach (var n in numbers)
+        }
+        private void ChangeList(List<Name> list)
+        {
+            var deplorables = new List<string>();
+            for (int i = 0; i < list.Count; i++)
             {
-                MarketPapers.Add(new Deposit(BankNames[n]));
+                if (list[i].isTaken)
+                {
+                    deplorables.Add(list[i].Value);
+                }
             }
-            numbers.Clear();
-            while (numbers.Count < 15)
+            for (int i = 0; i < deplorables.Count; i++)
             {
-                int number = random.Next(0, CountryNames.Count - 1);
-                if (!numbers.Contains(number))
-                    numbers.Add(number);
-            }
-            foreach (var n in numbers)
-            {
-                MarketPapers.Add(new Bond(CountryNames[n]));
+                list.Remove(new Name(deplorables[i], true));
+                list.Add(new Name(deplorables[i], false));
             }
         }
     }
