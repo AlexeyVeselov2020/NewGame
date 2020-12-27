@@ -52,7 +52,7 @@ namespace WpfApp2
             {
                 if(complexityBox.SelectedItem!=null)
                 {
-                    Player.SetValues(nameBox.Text, complexityBox.SelectedItem.ToString());
+                    Player.SetValues(complexityBox.SelectedItem.ToString());
                     var taskWindow = new MainWindow();
                     this.Close();
                     taskWindow.Show();

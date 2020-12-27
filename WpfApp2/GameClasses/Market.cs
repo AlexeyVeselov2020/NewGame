@@ -37,14 +37,19 @@ namespace WpfApp2
             for (int i = 0; i < helpList.Count; i++)
                 CountryNames.Add(new Name(helpList[i], false));
         }
-        public void RenewAll()
+        public void RenewAll(ref List<IValuablePieceOfPaper> bankrupts)
         {
             foreach (var p in MarketPapers)
+            {
                 p.Renew(this);
+                if (p.Bankrupt)
+                    bankrupts.Add(p);
+            }
 
         }
-        public void Fill() // фабричный метод?
+        public void Fill(ref List<IValuablePieceOfPaper> bankrupts) // фабричный метод?
         {
+            RenewAll(ref bankrupts);
             MarketPapers.Clear();
             var deplorables = new List<string>();
             for (int i = 0; i < CompanyNames.Count; i++)
@@ -55,7 +60,7 @@ namespace WpfApp2
                     if (stock == null)
                         deplorables.Add(CompanyNames[i].Value);
                     else
-                        MarketPapers.Add(new Stock(stock.Name));
+                        MarketPapers.Add(new Stock(stock.Name, this));
                 }
             }
             for (int i = 0; i < deplorables.Count; i++)
@@ -65,10 +70,10 @@ namespace WpfApp2
             }
             ChangeList(BankNames);
             ChangeList(CountryNames);
-            Random random = new Random();
+            Random random = new Random(Player.Turn + 5000 + MarketPapers.Count + (int)Player.InvestedMoney);
             while (MarketPapers.Count < 45)
             {
-                int choice = random.Next(0, 2);
+                int choice = random.Next(0, 3);
                 if (choice == 0)
                     MarketPapers.Add(new Stock(this));
                 if (choice == 1)

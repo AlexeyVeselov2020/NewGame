@@ -16,23 +16,30 @@
                 <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
             </Border.Effect>
             <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10">
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Name: " FontSize="17"/>
-                    <TextBlock x:Name="textblockName" Text="" FontSize="17"/>
+                    <TextBlock x:Name="textblockName" FontSize="17"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <TextBlock x:Name="percentorpriceBlock" Text="Price: " FontSize="17"/> <!--для акций одно для всего остального другое-->
-                    <TextBlock Text="" FontSize="17"/>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock x:Name="percentorpriceBlock" FontSize="17"/>
+                    <TextBlock x:Name="percentorpriceBox" FontSize="17"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <TextBlock x:Name="quantityBlock" Text="Quantity: " FontSize="17"/>
-                    <TextBlock Text="" FontSize="17"/>
+                <StackPanel x:Name="percentofbacruptPanel" Orientation="Horizontal" Margin="5" Visibility="Hidden">
+                    <TextBlock Text="Percentage of bank failure: " FontSize="17"/>
+                    <TextBlock x:Name="percentofbancruptBox" Text="" FontSize="17"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <TextBlock Text="Name: " FontSize="17"/>
-                    <TextBox Text="" Margin="0,0,0,0" PreviewTextInput="NumberValidationTextBox"  FontSize="17" Style="{StaticResource MaterialDesignTextBox}"/>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock x:Name="quantityBlock"  FontSize="17"/>
+                    <TextBlock x:Name="quantityBox" FontSize="17"/>
                 </StackPanel>
-
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock x:Name="quantitytobuyBlock"  FontSize="17"/>
+                    <TextBox Text="" x:Name="quantitytobuyBox" MaxLength="6" MinWidth="70" Margin="0,0,0,0" PreviewTextInput="NumberValidationTextBox"  FontSize="17" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button x:Name="buyButton" Content="Buy" FontSize="17" Margin="55,0,0,0" Click="BuyButton_Click"/>
+                    <Button Content="Close" x:Name="closeButton"   Margin="100,0,0,0" FontSize="17" Click="CloseButton_Click"/>
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>

@@ -31,7 +31,7 @@ namespace WpfApp2
         public bool Bankrupt { get; set; }
         public Stock(Market market)
         {
-            var random = new Random();
+            var random = new Random(Player.Turn + 2000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
             int index = 0;
             do index = random.Next(0, market.CompanyNames.Count - 1); while (market.CompanyNames[index].isTaken);
             Name = market.CompanyNames[index].Value;
@@ -41,6 +41,10 @@ namespace WpfApp2
             Price = Multiplication / Quantity;
             TotalValue = Quantity * Price;
             Bankrupt = false;
+            DifficultyOptions();
+        }
+        private void DifficultyOptions()
+        {
             if (Player.Difficulty == 0)
             {
                 minQuantity = 500;
@@ -57,9 +61,9 @@ namespace WpfApp2
                 maxQuantity = 10000; // MAX = 10k, MIN = 1k
             }
         }
-        public Stock(string name)
+        public Stock(string name, Market market)
         {
-            var random = new Random();
+            var random = new Random(Player.Turn + 3000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
             Name = name;
             Quantity = random.Next((int)minQuantity, (int)maxQuantity);
             Price = Multiplication / Quantity;
@@ -86,7 +90,7 @@ namespace WpfApp2
         {
             if (market.MarketPapers.Contains(this))
             {
-                var random = new Random();
+                var random = new Random(Player.Turn + 4000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
                 Quantity = random.Next((int)minQuantity, (int)maxQuantity);
                 Price = Multiplication / Quantity;
                 TotalValue = Quantity * Price;

@@ -24,18 +24,15 @@ namespace WpfApp2
         public IEnumerable<IValuablePieceOfPaper> StockMarket { get; }
         public IEnumerable<IValuablePieceOfPaper> BondMarket { get; }
         public IEnumerable<IValuablePieceOfPaper> DepositMarket { get; }
+        public double Money { get; }
         public MainWindow()
         {
             Ownings = Player.Ownings;
+            Money = Player.Money;
             StockMarket = Player.OurMarket.MarketPapers.Where(c=>Names.CompanyNames().Contains(c.Name)==true);
             BondMarket = Player.OurMarket.MarketPapers.Where(c => Names.CountryNames().Contains(c.Name) == true);
             DepositMarket = Player.OurMarket.MarketPapers.Where(c => Names.BankNames().Contains(c.Name) == true);
             InitializeComponent();
-
-            Binding binding = new Binding();
-
-            binding.Source = Player.Money;
-            playerinfoTextBlock.SetBinding(TextBlock.TextProperty, binding);
 
             switch (Player.Difficulty)
             {
@@ -66,7 +63,7 @@ namespace WpfApp2
         private void BuyClick(object sender, RoutedEventArgs e)
         {
             var item = (IValuablePieceOfPaper)(sender as Button).DataContext;
-            var BuyWindow = new SellBuyWindow(item);
+            var BuyWindow = new SellBuyWindow(item,this);
             this.IsEnabled=false;
             BuyWindow.Show();
         }

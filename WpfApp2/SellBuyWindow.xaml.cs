@@ -21,10 +21,12 @@ namespace WpfApp2
     public partial class SellBuyWindow : Window
     {
         public IValuablePieceOfPaper correntPaper { get; set; }
-        public SellBuyWindow(IValuablePieceOfPaper paper)
+        public Window previousWindow { get; set; }
+        public SellBuyWindow(IValuablePieceOfPaper paper, Window window)
         {
             InitializeComponent();
             correntPaper = paper;
+            previousWindow = window;
             switch (Player.Difficulty)
             {
                 case 1:
@@ -39,13 +41,60 @@ namespace WpfApp2
                 default:
                     break;
             }
+            textblockName.Text = paper.Name;
+            if(Names.CompanyNames().Contains(paper.Name))
+            {
+                percentorpriceBlock.Text = "Price: ";
+                percentorpriceBox.Text = paper.Price.ToString();
+                quantityBlock.Text = "Maximum quantity of stocks: ";
+                quantityBox.Text = Math.Floor(Math.Min(paper.Quantity,(Player.Money/paper.Price))).ToString();
+                quantitytobuyBlock.Text = "Quantity to buy: ";
+            }
+            else if(Names.BankNames().Contains(paper.Name))
+            {
+                Deposit deposit = paper as Deposit;
+                percentorpriceBlock.Text = "Interest rate: ";
+                percentorpriceBox.Text = (new StringBuilder(deposit.Percent.ToString() + "%").ToString());
+                percentofbacruptPanel.Visibility = Visibility.Visible;
+                percentofbancruptBox.Text= (new StringBuilder(deposit.BankruptcyProbability.ToString() + "%").ToString());
+                quantityBlock.Text = "Maximum quantity of invested funds: ";
+                quantityBox.Text = Math.Floor(Math.Min(deposit.MaxQuantity, Player.Money)).ToString();
+                quantitytobuyBlock.Text = "Funds for investment: ";
+            }
+            else if (Names.CountryNames().Contains(paper.Name))
+            {
+                Bond bond = paper as Bond;
+                percentorpriceBlock.Text = "Interest rate: ";
+                percentorpriceBox.Text = (new StringBuilder(bond.Percent.ToString() + "%").ToString());
+                quantityBlock.Text = "Maximum quantity of invested funds: ";
+                quantityBox.Text = Math.Floor(Math.Min(bond.MaxQuantity, Player.Money)).ToString();
+                quantitytobuyBlock.Text = "Funds for investment: ";
+            }
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+$");
-            if (int.Parse(e.Text) > 0 && int.Parse(e.Text)<=correntPaper.Quantity)
-                e.Handled = regex.IsMatch(e.Text);
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            previousWindow.IsEnabled = true;
+        }
+
+        private void BuyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var quantitytobuy = double.Parse(quantitytobuyBox.Text);
+            if (quantitytobuy <= double.Parse(quantityBox.Text))
+            { 
+                Player.Buy(correntPaper, quantitytobuy);
+                this.Close();
+                previousWindow.IsEnabled = true;
+            }
+            else
+                MessageBox.Show("You don't have enough funds.");
         }
     }
 }

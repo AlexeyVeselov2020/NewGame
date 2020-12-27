@@ -8,7 +8,7 @@ namespace WpfApp2
 {
     public class Bond : IValuablePieceOfPaper
     {
-        private const double maxQuantity = 1000000;
+        public double MaxQuantity { get; set; }
         private const double minPercent = 1;
         private static double maxPercent = 7;
         public string Name { get; set; }
@@ -20,22 +20,36 @@ namespace WpfApp2
 
         public Bond(Market market)
         {
+            DifficultyOptions();
             Quantity = TotalValue = 0;
             Price = 1;
             Bankrupt = false;
-            var random = new Random();
+            var random = new Random(Player.Turn + 6000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
             int index = 0;
             do index = random.Next(0, market.CountryNames.Count - 1); while (market.CountryNames[index].isTaken);
             Name = market.CountryNames[index].Value;
             market.CountryNames.RemoveAt(index);
             market.CountryNames.Add(new Name(Name, true));
             Percent = random.Next((int)minPercent, (int)maxPercent);
+
+        }
+        private void DifficultyOptions()
+        {
             if (Player.Difficulty == 0)
+            {
                 maxPercent = 7;
+                MaxQuantity = 1000000;
+            }
             if (Player.Difficulty == 1)
+            {
                 maxPercent = 6;
+                MaxQuantity = 700000;
+            }
             if (Player.Difficulty == 2)
+            {
                 maxPercent = 4;
+                MaxQuantity = 300000;
+            }
         }
         public Bond(string name, double quantity, double percent)
         {

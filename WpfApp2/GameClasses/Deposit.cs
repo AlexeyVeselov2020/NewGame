@@ -8,7 +8,7 @@ namespace WpfApp2
 {
     public class Deposit : IValuablePieceOfPaper
     {
-        private const double maxQuantity = 1000000;
+        public double MaxQuantity { get; set; }
         private static double minBankruptcyProbability = 1;
         private const double maxBankruptcyProbability = 10;
         public const double MinPercent = 5;
@@ -25,20 +25,34 @@ namespace WpfApp2
             Quantity = TotalValue = 0;
             Price = 1;
             Bankrupt = false;
-            var random = new Random();
+            var random = new Random(Player.Turn + market.MarketPapers.Count + market.MarketPapers.Count + (int)Player.InvestedMoney);
             int index = 0;
             do index = random.Next(0, market.BankNames.Count - 1); while (market.BankNames[index].isTaken);
             Name = market.BankNames[index].Value;
             market.BankNames.RemoveAt(index);
             market.BankNames.Add(new Name(Name, true));
+            DifficultyOptions();
             BankruptcyProbability = random.Next((int)minBankruptcyProbability, (int)maxBankruptcyProbability);
-            Percent = MinPercent + BankruptcyProbability * 3;
+            Percent = PercentCount(BankruptcyProbability);
+
+        }
+        private void DifficultyOptions()
+        {
             if (Player.Difficulty == 0)
+            {
                 minBankruptcyProbability = 1;
+                MaxQuantity = 1000000;
+            }
             if (Player.Difficulty == 1)
+            {
                 minBankruptcyProbability = 3;
+                MaxQuantity = 700000;
+            }
             if (Player.Difficulty == 2)
+            {
                 minBankruptcyProbability = 5;
+                MaxQuantity = 300000;
+            }
         }
         public Deposit(string name, double quantity, double bp)
         {
@@ -47,7 +61,18 @@ namespace WpfApp2
             Name = name;
             Bankrupt = false;
             BankruptcyProbability = bp;
-            Percent = MinPercent + BankruptcyProbability * 3;
+            Percent = PercentCount(BankruptcyProbability);
+        }
+        private double PercentCount(double bp)
+        {
+            if (Player.Difficulty == 0)
+                return MinPercent + bp * 3;
+            else if (Player.Difficulty == 1)
+                return MinPercent + bp * 2;
+            else if (Player.Difficulty == 2)
+                return MinPercent + bp;
+            else
+                return 0;
         }
         public IValuablePieceOfPaper CreateAPair(double quantity)
         {
@@ -61,7 +86,7 @@ namespace WpfApp2
         {
             Quantity = Quantity * ((100 + Percent) / 100);
             TotalValue = Quantity;
-            var random = new Random();
+            var random = new Random(Player.Turn + 1000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
             int result = random.Next(1, 100);
             if (result <= BankruptcyProbability)
             {
