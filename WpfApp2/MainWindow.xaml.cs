@@ -21,10 +21,21 @@ namespace WpfApp2
     public partial class MainWindow : Window
     {
         public IEnumerable<IValuablePieceOfPaper> Ownings { get; }
+        public IEnumerable<IValuablePieceOfPaper> StockMarket { get; }
+        public IEnumerable<IValuablePieceOfPaper> BondMarket { get; }
+        public IEnumerable<IValuablePieceOfPaper> DepositMarket { get; }
         public MainWindow()
         {
             Ownings = Player.Ownings;
+            StockMarket = Player.OurMarket.MarketPapers.Where(c=>Names.CompanyNames().Contains(c.Name)==true);
+            BondMarket = Player.OurMarket.MarketPapers.Where(c => Names.CountryNames().Contains(c.Name) == true);
+            DepositMarket = Player.OurMarket.MarketPapers.Where(c => Names.BankNames().Contains(c.Name) == true);
             InitializeComponent();
+
+            Binding binding = new Binding();
+
+            binding.Source = Player.Money;
+            playerinfoTextBlock.SetBinding(TextBlock.TextProperty, binding);
 
             switch (Player.Difficulty)
             {
@@ -50,6 +61,14 @@ namespace WpfApp2
         private void InfoClick(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void BuyClick(object sender, RoutedEventArgs e)
+        {
+            var item = (IValuablePieceOfPaper)(sender as Button).DataContext;
+            var BuyWindow = new SellBuyWindow(item);
+            this.IsEnabled=false;
+            BuyWindow.Show();
         }
     }
 }

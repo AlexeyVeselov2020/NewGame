@@ -4,9 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp2"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="SellBuyWindow" Height="450" Width="800">
+        Title="SellBuyWindow" Height="300" Width="400">
+    <Window.Background>
+        <ImageBrush Stretch="Fill" Opacity="0.7" x:Name="IB"/>
+    </Window.Background>
     <Grid>
-        
+        <Border Margin="20" CornerRadius="20" Background="#FFE5E5E5">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
+            </Border.Effect>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Name: " FontSize="17"/>
+                    <TextBlock x:Name="textblockName" Text="" FontSize="17"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock x:Name="percentorpriceBlock" Text="Price: " FontSize="17"/> <!--для акций одно для всего остального другое-->
+                    <TextBlock Text="" FontSize="17"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock x:Name="quantityBlock" Text="Quantity: " FontSize="17"/>
+                    <TextBlock Text="" FontSize="17"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Name: " FontSize="17"/>
+                    <TextBox Text="" Margin="0,0,0,0" PreviewTextInput="NumberValidationTextBox"  FontSize="17" Style="{StaticResource MaterialDesignTextBox}"/>
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

@@ -13,7 +13,7 @@
     </Window.Background>
     <Grid x:Name="StartGrid">
         <StackPanel>
-            <Border MinWidth="200" Margin="50" MaxWidth="250" Padding="10"  VerticalAlignment="Top" Background="White" CornerRadius="20">
+            <Border MinWidth="200" Margin="50" MaxWidth="250" Padding="10"  VerticalAlignment="Top" Background="#FFE5E5E5" CornerRadius="20">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
                 </Border.Effect>
