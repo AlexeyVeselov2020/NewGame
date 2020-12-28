@@ -40,7 +40,7 @@ namespace WpfApp2
             market.CompanyNames.RemoveAt(index);
             market.CompanyNames.Add(new Name(Name, true));
             Quantity = random.Next((int)minQuantity, (int)maxQuantity);
-            Price = Multiplication / Quantity;
+            Price = Math.Round(Multiplication / Quantity,2);
             TotalValue = Quantity * Price;
             Bankrupt = false;
             DifficultyOptions();
@@ -69,7 +69,7 @@ namespace WpfApp2
             var random = new Random(Player.Random + 3000 + amount);
             Name = name;
             Quantity = random.Next((int)minQuantity, (int)maxQuantity);
-            Price = Multiplication / Quantity;
+            Price = Math.Round(Multiplication / Quantity, 2);
             TotalValue = Quantity * Price;
             Bankrupt = false;
         }
@@ -96,7 +96,7 @@ namespace WpfApp2
             {
                 var random = new Random(Player.Random + 4000 + amount);
                 Quantity = random.Next((int)minQuantity, (int)maxQuantity);
-                Price = Multiplication / Quantity;
+                Price = Math.Round(Multiplication / Quantity, 2);
                 TotalValue = Quantity * Price;
             }
             else

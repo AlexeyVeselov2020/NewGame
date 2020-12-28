@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,18 +11,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace WpfApp2
 {
     /// <summary>
-    /// Interaction logic for SellBuyWindow.xaml
+    /// Interaction logic for SellWindow.xaml
     /// </summary>
-    public partial class SellBuyWindow : Window
+    public partial class SellWindow : Window
     {
         public IValuablePieceOfPaper correntPaper { get; set; }
         public MainWindow previousWindow { get; set; }
-        public int Mode { get; set; }
-        public SellBuyWindow(IValuablePieceOfPaper paper, MainWindow window, int mode)
+        public SellWindow(IValuablePieceOfPaper paper, MainWindow window)
         {
             InitializeComponent();
             this.Closing += new System.ComponentModel.CancelEventHandler(SellBuyWindow_Closing);
@@ -44,33 +43,33 @@ namespace WpfApp2
                     break;
             }
             textblockName.Text = paper.Name;
-            if(Names.CompanyNames().Contains(paper.Name))
+            if (Names.CompanyNames().Contains(paper.Name))
             {
                 percentorpriceBlock.Text = "Price: ";
                 percentorpriceBox.Text = paper.Price.ToString();
-                quantityBlock.Text = "Maximum quantity of stocks: ";
-                quantityBox.Text = Math.Floor(Math.Min(paper.Quantity,((previousWindow as MainWindow).player.Money/paper.Price))).ToString();
-                quantitytobuyBlock.Text = "Quantity to buy: ";
+                quantityBlock.Text = "Number of your stocks: ";
+                quantityBox.Text = paper.Quantity.ToString();
+                quantitytobuyBlock.Text = "Quantity to sell: ";
             }
-            else if(Names.BankNames().Contains(paper.Name))
+            else if (Names.BankNames().Contains(paper.Name))
             {
                 Deposit deposit = paper as Deposit;
                 percentorpriceBlock.Text = "Interest rate: ";
                 percentorpriceBox.Text = (new StringBuilder(deposit.Percent.ToString() + "%").ToString());
                 percentofbacruptPanel.Visibility = Visibility.Visible;
-                percentofbancruptBox.Text= (new StringBuilder(deposit.BankruptcyProbability.ToString() + "%").ToString());
-                quantityBlock.Text = "Maximum quantity of invested funds: ";
-                quantityBox.Text = Math.Floor(Math.Min(deposit.MaxQuantity, previousWindow.player.Money)).ToString();
-                quantitytobuyBlock.Text = "Funds for investment: ";
+                percentofbancruptBox.Text = (new StringBuilder(deposit.BankruptcyProbability.ToString() + "%").ToString());
+                quantityBlock.Text = "Your intested funds: ";
+                quantityBox.Text = deposit.Quantity.ToString();
+                quantitytobuyBlock.Text = "Deposit for sell: ";
             }
             else if (Names.CountryNames().Contains(paper.Name))
             {
                 Bond bond = paper as Bond;
                 percentorpriceBlock.Text = "Interest rate: ";
                 percentorpriceBox.Text = (new StringBuilder(bond.Percent.ToString() + "%").ToString());
-                quantityBlock.Text = "Maximum quantity of invested funds: ";
-                quantityBox.Text = Math.Floor(Math.Min(bond.MaxQuantity, previousWindow.player.Money)).ToString();
-                quantitytobuyBlock.Text = "Funds for investment: ";
+                quantityBlock.Text = "Your intested funds: ";
+                quantityBox.Text = bond.Quantity.ToString();
+                quantitytobuyBlock.Text = "Bond for sell: ";
             }
         }
 
@@ -86,17 +85,17 @@ namespace WpfApp2
             previousWindow.IsEnabled = true;
         }
 
-        private void BuyButton_Click(object sender, RoutedEventArgs e)
+        private void SellButton_Click(object sender, RoutedEventArgs e)
         {
-            var quantitytobuy = double.Parse(quantitytobuyBox.Text);
-            if (quantitytobuy <= double.Parse(quantityBox.Text))
+            var quantitytosell = double.Parse(quantitytobuyBox.Text);
+            if (quantitytosell <= double.Parse(quantityBox.Text))
             {
-                previousWindow.player.Buy(correntPaper, quantitytobuy);
+                previousWindow.player.Sell(correntPaper, quantitytosell);
                 this.Close();
                 previousWindow.IsEnabled = true;
             }
             else
-                MessageBox.Show("You don't have enough funds.");
+                MessageBox.Show("You don't have enough securities.");
         }
 
         private void SellBuyWindow_Closing(object sender, EventArgs e)

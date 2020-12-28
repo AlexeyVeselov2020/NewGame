@@ -53,25 +53,32 @@ namespace WpfApp2
 
         private void SellClick(object sender, RoutedEventArgs e)
         {
-
+            var item = (IValuablePieceOfPaper)(sender as Button).DataContext;
+            var SellWindow = new SellWindow(item, this);
+            this.IsEnabled = false;
+            SellWindow.Show();
         }
 
         private void InfoClick(object sender, RoutedEventArgs e)
         {
-
+            var item = (IValuablePieceOfPaper)(sender as Button).DataContext;
+            var InfoWindow = new InfoWindow(item, this);
+            this.IsEnabled = false;
+            InfoWindow.Show();
         }
 
         private void BuyClick(object sender, RoutedEventArgs e)
         {
             var item = (IValuablePieceOfPaper)(sender as Button).DataContext;
-            var BuyWindow = new SellBuyWindow(item,this,0);
+            var BuyWindow = new BuyWindow(item,this);
             this.IsEnabled=false;
             BuyWindow.Show();
         }
 
         private void EndturnButton_Click(object sender, RoutedEventArgs e)
         {
-            player.RenewAll();
+            string answer = player.RenewAll();
+            MessageBox.Show(answer);
         }
     }
 }

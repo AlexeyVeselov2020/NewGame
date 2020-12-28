@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfApp2.InfoWindow"
+﻿<Window x:Class="WpfApp2.SellWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"
         Icon="coins.png"
-        Title="Information" Height="350" Width="400">
+        Title="Sale" Height="300" Width="450">
     <Window.Background>
         <ImageBrush Stretch="Fill" Opacity="0.7" x:Name="IB"/>
     </Window.Background>
@@ -21,10 +21,6 @@
                     <TextBlock x:Name="textblockName" FontSize="17"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Type: " FontSize="17"/>
-                    <TextBlock x:Name="typeBlock" FontSize="17"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock x:Name="percentorpriceBlock" FontSize="17"/>
                     <TextBlock x:Name="percentorpriceBox" FontSize="17"/>
                 </StackPanel>
@@ -37,11 +33,12 @@
                     <TextBlock x:Name="quantityBox" FontSize="17"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Total value: " FontSize="17"/>
-                    <TextBlock Text="" x:Name="totalBox" FontSize="17" />
+                    <TextBlock x:Name="quantitytobuyBlock"  FontSize="17"/>
+                    <TextBox Text="" x:Name="quantitytobuyBox" MaxLength="7" MinWidth="70" Margin="0,0,0,0" PreviewTextInput="NumberValidationTextBox"  FontSize="17" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="20">
-                    <Button Content="Close" x:Name="closeButton"   Margin="120,0,0,0" FontSize="17" Click="CloseButton_Click"/>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button x:Name="sellButton" Content="Sell" FontSize="17" Margin="80,0,0,0" Click="SellButton_Click"/>
+                    <Button Content="Close" x:Name="closeButton"   Margin="100,0,0,0" FontSize="17" Click="CloseButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </Border>

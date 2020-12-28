@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:WpfApp2"
         mc:Ignorable="d"
         x:Name="taskWindow"
+        Icon="coins.png"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="TaskWindow" Height="500" Width="900">
+        Title="Financier Simulator" Height="500" Width="900">
     <Window.Background>
         <ImageBrush Stretch="Fill" Opacity="0.7" x:Name="IB"/>
     </Window.Background>
@@ -85,10 +86,10 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal">
-                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="160" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="180" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
                                                     <ContentPresenter/>
                                                 </InlineUIContainer></TextBlock>
-                                                <Button Content="Buy" Foreground="White"  Focusable="False" Margin="30,5,5,5" MaxHeight="30" Click="BuyClick">
+                                                <Button Content="Buy" Foreground="White"  Focusable="False" Margin="10,5,5,5" MaxHeight="30" Click="BuyClick">
                                                     <Button.Style>
                                                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                                                             <Setter Property="Visibility" Value="Hidden" />
@@ -129,10 +130,10 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal">
-                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="160" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="180" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
                                                     <ContentPresenter/>
                                                 </InlineUIContainer></TextBlock>
-                                                <Button Content="Buy" Foreground="White"  Focusable="False" Margin="30,5,5,5" MaxHeight="30" Click="BuyClick">
+                                                <Button Content="Buy" Foreground="White"  Focusable="False" Margin="10,5,5,5" MaxHeight="30" Click="BuyClick">
                                                     <Button.Style>
                                                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                                                             <Setter Property="Visibility" Value="Hidden" />
@@ -173,10 +174,10 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal">
-                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="160" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="180" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
                                                     <ContentPresenter/>
                                                 </InlineUIContainer></TextBlock>
-                                                <Button Content="Buy" Foreground="White"  Focusable="False" Margin="30,5,5,5" MaxHeight="30" Click="BuyClick">
+                                                <Button Content="Buy" Foreground="White"  Focusable="False" Margin="10,5,5,5" MaxHeight="30" Click="BuyClick">
                                                     <Button.Style>
                                                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                                                             <Setter Property="Visibility" Value="Hidden" />
@@ -206,14 +207,16 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Border Background="#FFE5E5E5" CornerRadius="20" Margin="720,40,20,250">
+        <Border Background="#FFE5E5E5" CornerRadius="20" Margin="720,40,20,190">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
             </Border.Effect>
             <StackPanel>
                 <TextBlock FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,10,0,0" VerticalAlignment="Top" Width="140" Text="Facilities: " />
                 <TextBlock x:Name="playerTextBlock" FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,0,0,0" VerticalAlignment="Top" Width="140" Text="{Binding Path=Money,UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Text="Goal: " FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,20,0,0" VerticalAlignment="Top" Width="172"/>
+                <TextBlock FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,5,0,0" VerticalAlignment="Top" Width="140" Text="Invested facilities: " />
+                <TextBlock FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,0,0,0" VerticalAlignment="Top" Width="140" Text="{Binding Path=InvestedMoney,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Goal: " FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,20,0,0" VerticalAlignment="Top" Width="140"/>
                 <TextBlock x:Name="goalTextBlock" FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,0,0,0" VerticalAlignment="Top" Width="140" Text="{Binding Path=Goal,UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Border>

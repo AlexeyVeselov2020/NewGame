@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         x:Name="startWindow"
-        Title="GameName" Height="450" Width="400">
+        Icon="coins.png"
+        Title="Financier Simulator" Height="450" Width="400">
     <Window.Background>
         <ImageBrush ImageSource="Themes/EasyTheme.jpg" Stretch="Fill" Opacity="0.7" x:Name="IB"/>
     </Window.Background>
@@ -17,11 +18,11 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
                 </Border.Effect>
-                <TextBlock Text="GameName" TextAlignment="Center" FontSize="30" Margin="10"/>
+                <TextBlock Text="Financier Simulator" TextAlignment="Center" FontSize="23" Margin="10"/>
             </Border>
             <ComboBox x:Name="complexityBox" materialDesign:HintAssist.Hint="Выберите сложность" MaxHeight="40" MaxWidth="300" Margin="60,0,60,0" Background="Azure"/>
-            <TextBox x:Name="nameBox" materialDesign:HintAssist.Hint="Введите имя" HorizontalAlignment="Left" MaxHeight="40" MaxWidth="300" Background="Azure" Margin="60,30,0,0" TextWrapping="Wrap" Width="140"/>
-            <Button x:Name="startButton" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="150" MinHeight="40" MinWidth="150" MaxHeight="40" Margin="60,70,60,0" Click="StartButton_Click" />
+            <Button x:Name="hintButton" Content="Rules" Foreground="Black" HorizontalAlignment="Left" MaxHeight="40" MaxWidth="300" Background="Azure" Margin="145,80,0,0" Width="100" Click="HintButton_Click"/>
+            <Button x:Name="startButton" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="150" MinHeight="40" MinWidth="150" MaxHeight="40" Margin="60,10,60,0" Click="StartButton_Click" />
         </StackPanel>
     </Grid>
 </Window>
