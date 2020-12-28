@@ -21,6 +21,7 @@ namespace WpfApp2
 
     public class Stock : IValuablePieceOfPaper
     {
+        private static int amount = 0;
         private static double minQuantity = 500;
         private static double maxQuantity = 10000;
         const double Multiplication = 10000000;
@@ -31,7 +32,8 @@ namespace WpfApp2
         public bool Bankrupt { get; set; }
         public Stock(Market market)
         {
-            var random = new Random(Player.Turn + 2000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
+            amount++;
+            var random = new Random(Player.Random + 2000 + amount);
             int index = 0;
             do index = random.Next(0, market.CompanyNames.Count - 1); while (market.CompanyNames[index].isTaken);
             Name = market.CompanyNames[index].Value;
@@ -63,7 +65,8 @@ namespace WpfApp2
         }
         public Stock(string name, Market market)
         {
-            var random = new Random(Player.Turn + 3000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
+            amount++;
+            var random = new Random(Player.Random + 3000 + amount);
             Name = name;
             Quantity = random.Next((int)minQuantity, (int)maxQuantity);
             Price = Multiplication / Quantity;
@@ -88,9 +91,10 @@ namespace WpfApp2
         }
         public void Renew(Market market)
         {
+            amount++;
             if (market.MarketPapers.Contains(this))
             {
-                var random = new Random(Player.Turn + 4000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
+                var random = new Random(Player.Random + 4000 + amount);
                 Quantity = random.Next((int)minQuantity, (int)maxQuantity);
                 Price = Multiplication / Quantity;
                 TotalValue = Quantity * Price;

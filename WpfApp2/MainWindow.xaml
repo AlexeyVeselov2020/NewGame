@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         x:Name="taskWindow"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="TaskWindow" Height="500" Width="900"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Title="TaskWindow" Height="500" Width="900">
     <Window.Background>
         <ImageBrush Stretch="Fill" Opacity="0.7" x:Name="IB"/>
     </Window.Background>
@@ -19,7 +18,7 @@
             </Border.Effect>
             <StackPanel>
                 <TextBlock Text="Ownings" Margin="20,5,0,5"/>
-                <ListBox x:Name="playerassetsBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding Ownings, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0">
+                <ListBox x:Name="playerassetsBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding Path=Ownings, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="Background" Value="LightSteelBlue"/>
@@ -76,7 +75,7 @@
         <TabControl HorizontalAlignment="Left" Height="418" Margin="380,21,0,0" VerticalAlignment="Top" Width="326">
             <TabItem Header="Stocks">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="stocksBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding StockMarket}" Margin="0,6,6,0">
+                    <ListBox x:Name="stocksBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding Path=StockList,UpdateSourceTrigger=PropertyChanged}" Margin="0,6,6,0">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Background" Value="LightSteelBlue"/>
@@ -120,7 +119,7 @@
             </TabItem>
             <TabItem Header="Bond">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="bondsBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding BondMarket}" Margin="0,6,6,0">
+                    <ListBox x:Name="bondsBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding Path=BondList,UpdateSourceTrigger=PropertyChanged}" Margin="0,6,6,0">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Background" Value="LightSteelBlue"/>
@@ -164,7 +163,7 @@
             </TabItem>
             <TabItem Header="Deposits">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="depositsBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding DepositMarket}" Margin="0,6,6,0">
+                    <ListBox x:Name="depositsBox" HorizontalAlignment="Right" Height="370" VerticalAlignment="Top" Width="310" ItemsSource="{Binding Path=DepositList,UpdateSourceTrigger=PropertyChanged}" Margin="0,6,6,0">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Background" Value="LightSteelBlue"/>
@@ -207,8 +206,17 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBlock x:Name="playerinfoTextBlock" HorizontalAlignment="Left" Height="33" Margin="716,22,0,0" VerticalAlignment="Top" Width="172" Text="{Binding Money, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label x:Name="goalsLebel" Content="Goals(tracking?)" HorizontalAlignment="Left" Height="33" Margin="716,144,0,0" VerticalAlignment="Top" Width="172"/>
-        <Button x:Name="endturnButton" Content="End turn" HorizontalAlignment="Left" Height="76" Margin="739,363,0,0" VerticalAlignment="Top" Width="131"/>
+        <Border Background="#FFE5E5E5" CornerRadius="20" Margin="720,40,20,250">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="LightCoral" ShadowDepth="0"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,10,0,0" VerticalAlignment="Top" Width="140" Text="Facilities: " />
+                <TextBlock x:Name="playerTextBlock" FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,0,0,0" VerticalAlignment="Top" Width="140" Text="{Binding Path=Money,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Goal: " FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,20,0,0" VerticalAlignment="Top" Width="172"/>
+                <TextBlock x:Name="goalTextBlock" FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,0,0,0" VerticalAlignment="Top" Width="140" Text="{Binding Path=Goal,UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </Border>
+        <Button x:Name="endturnButton" Content="End turn" HorizontalAlignment="Left" Height="76" Margin="739,363,0,0" VerticalAlignment="Top" Width="131" Click="EndturnButton_Click"/>
     </Grid>
 </Window>

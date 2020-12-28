@@ -21,10 +21,12 @@ namespace WpfApp2
     public partial class SellBuyWindow : Window
     {
         public IValuablePieceOfPaper correntPaper { get; set; }
-        public Window previousWindow { get; set; }
-        public SellBuyWindow(IValuablePieceOfPaper paper, Window window)
+        public MainWindow previousWindow { get; set; }
+        public int Mode { get; set; }
+        public SellBuyWindow(IValuablePieceOfPaper paper, MainWindow window, int mode)
         {
             InitializeComponent();
+            this.Closing += new System.ComponentModel.CancelEventHandler(SellBuyWindow_Closing);
             correntPaper = paper;
             previousWindow = window;
             switch (Player.Difficulty)
@@ -47,7 +49,7 @@ namespace WpfApp2
                 percentorpriceBlock.Text = "Price: ";
                 percentorpriceBox.Text = paper.Price.ToString();
                 quantityBlock.Text = "Maximum quantity of stocks: ";
-                quantityBox.Text = Math.Floor(Math.Min(paper.Quantity,(Player.Money/paper.Price))).ToString();
+                quantityBox.Text = Math.Floor(Math.Min(paper.Quantity,((previousWindow as MainWindow).player.Money/paper.Price))).ToString();
                 quantitytobuyBlock.Text = "Quantity to buy: ";
             }
             else if(Names.BankNames().Contains(paper.Name))
@@ -58,7 +60,7 @@ namespace WpfApp2
                 percentofbacruptPanel.Visibility = Visibility.Visible;
                 percentofbancruptBox.Text= (new StringBuilder(deposit.BankruptcyProbability.ToString() + "%").ToString());
                 quantityBlock.Text = "Maximum quantity of invested funds: ";
-                quantityBox.Text = Math.Floor(Math.Min(deposit.MaxQuantity, Player.Money)).ToString();
+                quantityBox.Text = Math.Floor(Math.Min(deposit.MaxQuantity, previousWindow.player.Money)).ToString();
                 quantitytobuyBlock.Text = "Funds for investment: ";
             }
             else if (Names.CountryNames().Contains(paper.Name))
@@ -67,7 +69,7 @@ namespace WpfApp2
                 percentorpriceBlock.Text = "Interest rate: ";
                 percentorpriceBox.Text = (new StringBuilder(bond.Percent.ToString() + "%").ToString());
                 quantityBlock.Text = "Maximum quantity of invested funds: ";
-                quantityBox.Text = Math.Floor(Math.Min(bond.MaxQuantity, Player.Money)).ToString();
+                quantityBox.Text = Math.Floor(Math.Min(bond.MaxQuantity, previousWindow.player.Money)).ToString();
                 quantitytobuyBlock.Text = "Funds for investment: ";
             }
         }
@@ -88,13 +90,18 @@ namespace WpfApp2
         {
             var quantitytobuy = double.Parse(quantitytobuyBox.Text);
             if (quantitytobuy <= double.Parse(quantityBox.Text))
-            { 
-                Player.Buy(correntPaper, quantitytobuy);
+            {
+                previousWindow.player.Buy(correntPaper, quantitytobuy);
                 this.Close();
                 previousWindow.IsEnabled = true;
             }
             else
                 MessageBox.Show("You don't have enough funds.");
+        }
+
+        private void SellBuyWindow_Closing(object sender, EventArgs e)
+        {
+            previousWindow.IsEnabled = true;
         }
     }
 }

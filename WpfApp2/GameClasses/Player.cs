@@ -5,36 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace WpfApp2
 {
-    public static class Player
+    public class Player : INotifyPropertyChanged
     {
         public const double StartingMoney = 1000000;
         private static double expences = 0;
-        private static double goal = 0;
-        public static List<IValuablePieceOfPaper> Ownings = new List<IValuablePieceOfPaper>();
-        public static double Money { get; set; }
-        public static double InvestedMoney { get; set; }
+        private double goal;
+        private ObservableCollection<IValuablePieceOfPaper> ownings;
+        private double money;
+        public double InvestedMoney { get; set; }
         public static int Difficulty { get; set; }
-        public static int Turn = 0;
+        public static int Random = 0;
         public static Market OurMarket;
+        private ObservableCollection<Bond> bondList = new ObservableCollection<Bond>();
+        private ObservableCollection<Deposit> depositList = new ObservableCollection<Deposit>();
+        private ObservableCollection<Stock> stockList = new ObservableCollection<Stock>();
 
-        public static void SetValues(string difficulty) // использовать вместо конструктора
+        public Player(string difficulty) // использовать вместо конструктора
         {
             BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream fs = new FileStream("random.bin", FileMode.OpenOrCreate))
             {
                 if (fs.Length != 0)
-                    Turn = (int)formatter.Deserialize(fs);
+                    Random = (int)formatter.Deserialize(fs);
             }
-            Turn++;
+            Random++;
             using (FileStream fs = new FileStream("random.bin", FileMode.OpenOrCreate))
             {
-                formatter.Serialize(fs, Turn);
+                formatter.Serialize(fs, Random);
             }
             Money = StartingMoney;
             InvestedMoney = 0;
+            ownings = new ObservableCollection<IValuablePieceOfPaper>();
             switch (difficulty)
             {
                 case "Easy":
@@ -57,50 +63,140 @@ namespace WpfApp2
             }
             OurMarket = new Market();
             var l = new List<IValuablePieceOfPaper>();
-            OurMarket.Fill(ref l);
+            OurMarket.Fill(ref l, this);
+            foreach(var el in OurMarket.MarketPapers)
+            {
+                if(Names.CountryNames().Contains(el.Name))
+                {
+                    bondList.Add(el as Bond);
+                }
+                if (Names.BankNames().Contains(el.Name))
+                {
+                    depositList.Add(el as Deposit);
+                }
+                if (Names.CompanyNames().Contains(el.Name))
+                {
+                    stockList.Add(el as Stock);
+                }
+            }
         }
-        public static void Buy(IValuablePieceOfPaper paper, double quantity)
+        public event PropertyChangedEventHandler PropertyChanged; 
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public double Money
+        {
+            get { return money; }
+            set
+            {
+                money = value;
+                RaisePropertyChanged("Money");
+            }
+        }
+        public double Goal
+        {
+            get { return goal; }
+            set
+            {
+                goal = value;
+                RaisePropertyChanged("Goal");
+            }
+        }
+        public ObservableCollection<IValuablePieceOfPaper> Ownings
+        {
+            get { return ownings; }
+            set
+            {
+                ownings = value;
+                RaisePropertyChanged("Ownings");
+            }
+        }
+        public ObservableCollection<Bond> BondList
+        {
+            get { return bondList; }
+            set
+            {
+                bondList = value;
+                RaisePropertyChanged("BondList");
+            }
+        }
+        public ObservableCollection<Stock> StockList
+        {
+            get { return stockList; }
+            set
+            {
+                stockList = value;
+                RaisePropertyChanged("StockList");
+            }
+        }
+        public ObservableCollection<Deposit> DepositList
+        {
+            get { return depositList; }
+            set
+            {
+                depositList = value;
+                RaisePropertyChanged("DepositList");
+            }
+        }
+
+        private IValuablePieceOfPaper Find(string name, ObservableCollection<IValuablePieceOfPaper> list)
+        {
+            IValuablePieceOfPaper returnPaper = null;
+            foreach (var p in list)
+                if (p.Name == name)
+                {
+                    returnPaper = p;
+                    break;
+                }
+            return returnPaper;
+        }
+
+        public void Buy(IValuablePieceOfPaper paper, double quantity)
         {
             paper.Quantity -= quantity;
             if (Money >= quantity * paper.Price)
             {
                 Money -= quantity * paper.Price;
                 InvestedMoney += quantity * paper.Price;
-                if (!Ownings.Contains(Ownings.Find(a => a.Name == paper.Name)))
-                    Ownings.Add(paper.CreateAPair(quantity)); //incapsulated
+                if (!ownings.Contains(Find(paper.Name, ownings)))
+                    ownings.Add(paper.CreateAPair(quantity)); //incapsulated
                 else
                 {
-                    var paper0 = Ownings.Find(a => a.Name == paper.Name);
+                    var paper0 = Find(paper.Name, ownings);
                     paper0.Quantity += quantity;
                     paper0.TotalValue = paper0.Price * paper0.Quantity;
                 }
 
             }
         }
-        public static void Sell(int i, double quantity) // changed
+        public void Sell(int i, double quantity) // changed
         {
-            if (quantity == Ownings[i].Quantity)
+            if (quantity == ownings[i].Quantity)
             {
-                Money += Ownings[i].TotalValue;
-                InvestedMoney -= Ownings[i].TotalValue;
-                OurMarket.MarketPapers.Add(Ownings[i]);
-                Ownings.RemoveAt(i);
+                Money += ownings[i].TotalValue;
+                InvestedMoney -= ownings[i].TotalValue;
+                OurMarket.MarketPapers.Add(ownings[i]);
+                ownings.RemoveAt(i);
             }
             else
             {
-                Ownings[i].Quantity -= quantity;
-                Money += quantity * Ownings[i].Price;
-                InvestedMoney -= quantity * Ownings[i].Price;
-                OurMarket.MarketPapers.Add(Ownings[i].CreateAPair(quantity));
+                ownings[i].Quantity -= quantity;
+                Money += quantity * ownings[i].Price;
+                InvestedMoney -= quantity * ownings[i].Price;
+                OurMarket.MarketPapers.Add(ownings[i].CreateAPair(quantity));
             }
         }
-        public static void RenewAll() // End Turn Button
+        public void RenewAll() // End Turn Button
         {
             Money -= expences;
             if (Money < 0)
             {
                 // W A S T E D
-                Ownings.Clear();
+                ownings.Clear();
                 Money = -1000000000;
                 InvestedMoney = -1000000000;
             }
@@ -109,21 +205,39 @@ namespace WpfApp2
                 // V I C T O R Y
             }
             var bankrupts = new List<IValuablePieceOfPaper>();
-            OurMarket.Fill(ref bankrupts);
-            InvestedMoney = 0;
-            for (int i = 0; i < Ownings.Count; i++)
+            OurMarket.Fill(ref bankrupts, this);
+            bondList.Clear();
+            depositList.Clear();
+            stockList.Clear();
+            foreach (var el in OurMarket.MarketPapers)
             {
-                Ownings[i].Renew(OurMarket);
-                if (Ownings[i].Bankrupt && !OurMarket.MarketPapers.Contains(OurMarket.MarketPapers.Find(a => a.Name == Ownings[i].Name)))
-                    bankrupts.Add(Ownings[i]);
-                else if (Ownings[i].Bankrupt && OurMarket.MarketPapers.Contains(OurMarket.MarketPapers.Find(a => a.Name == Ownings[i].Name)))
-                    Ownings[i].Bankrupt = false;
+                if (Names.CountryNames().Contains(el.Name))
+                {
+                    bondList.Add(el as Bond);
+                }
+                if (Names.BankNames().Contains(el.Name))
+                {
+                    depositList.Add(el as Deposit);
+                }
+                if (Names.CompanyNames().Contains(el.Name))
+                {
+                    stockList.Add(el as Stock);
+                }
+            }
+            InvestedMoney = 0;
+            for (int i = 0; i < ownings.Count; i++)
+            {
+                ownings[i].Renew(OurMarket);
+                if (ownings[i].Bankrupt && !OurMarket.MarketPapers.Contains(OurMarket.MarketPapers.Find(a => a.Name == Ownings[i].Name)))
+                    bankrupts.Add(ownings[i]);
+                else if (ownings[i].Bankrupt && OurMarket.MarketPapers.Contains(OurMarket.MarketPapers.Find(a => a.Name == Ownings[i].Name)))
+                    ownings[i].Bankrupt = false;
                 else
-                    InvestedMoney += Ownings[i].TotalValue;
+                    InvestedMoney += ownings[i].TotalValue;
             }
             for (int i = 0; i < bankrupts.Count; i++)
             {
-                Ownings.Remove(Ownings.Find(a => a.Name == bankrupts[i].Name));
+                ownings.Remove(Find(bankrupts[i].Name, ownings));
                 OurMarket.BankNames.Remove(new Name(bankrupts[i].Name, true));
                 OurMarket.MarketPapers.Remove(OurMarket.MarketPapers.Find(a => a.Name == bankrupts[i].Name));
             }

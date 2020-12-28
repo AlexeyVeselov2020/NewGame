@@ -9,6 +9,7 @@ namespace WpfApp2
     public class Bond : IValuablePieceOfPaper
     {
         public double MaxQuantity { get; set; }
+        private static int amount = 0;
         private const double minPercent = 1;
         private static double maxPercent = 7;
         public string Name { get; set; }
@@ -20,11 +21,12 @@ namespace WpfApp2
 
         public Bond(Market market)
         {
+            amount++;
             DifficultyOptions();
             Quantity = TotalValue = 0;
             Price = 1;
             Bankrupt = false;
-            var random = new Random(Player.Turn + 6000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
+            var random = new Random(Player.Random + 6000 + amount);
             int index = 0;
             do index = random.Next(0, market.CountryNames.Count - 1); while (market.CountryNames[index].isTaken);
             Name = market.CountryNames[index].Value;

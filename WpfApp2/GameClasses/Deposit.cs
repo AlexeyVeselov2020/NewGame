@@ -8,6 +8,7 @@ namespace WpfApp2
 {
     public class Deposit : IValuablePieceOfPaper
     {
+        private static int amount;
         public double MaxQuantity { get; set; }
         private static double minBankruptcyProbability = 1;
         private const double maxBankruptcyProbability = 10;
@@ -22,10 +23,11 @@ namespace WpfApp2
 
         public Deposit(Market market)
         {
+            amount++;
             Quantity = TotalValue = 0;
             Price = 1;
             Bankrupt = false;
-            var random = new Random(Player.Turn + market.MarketPapers.Count + market.MarketPapers.Count + (int)Player.InvestedMoney);
+            var random = new Random(Player.Random + market.MarketPapers.Count + market.MarketPapers.Count + amount);
             int index = 0;
             do index = random.Next(0, market.BankNames.Count - 1); while (market.BankNames[index].isTaken);
             Name = market.BankNames[index].Value;
@@ -84,9 +86,10 @@ namespace WpfApp2
         }
         public void Renew(Market market)
         {
+            amount++;
             Quantity = Quantity * ((100 + Percent) / 100);
             TotalValue = Quantity;
-            var random = new Random(Player.Turn + 1000 + market.MarketPapers.Count + (int)Player.InvestedMoney);
+            var random = new Random(Player.Random + 1000 + market.MarketPapers.Count + amount);
             int result = random.Next(1, 100);
             if (result <= BankruptcyProbability)
             {

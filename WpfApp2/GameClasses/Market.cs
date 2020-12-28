@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace WpfApp2
 {
@@ -37,6 +38,17 @@ namespace WpfApp2
             for (int i = 0; i < helpList.Count; i++)
                 CountryNames.Add(new Name(helpList[i], false));
         }
+        private IValuablePieceOfPaper Find(string name, ObservableCollection<IValuablePieceOfPaper> list)
+        {
+            IValuablePieceOfPaper returnPaper = null;
+            foreach (var p in list)
+                if (p.Name == name)
+                {
+                    returnPaper = p;
+                    break;
+                }
+            return returnPaper;
+        }
         public void RenewAll(ref List<IValuablePieceOfPaper> bankrupts)
         {
             foreach (var p in MarketPapers)
@@ -47,7 +59,7 @@ namespace WpfApp2
             }
 
         }
-        public void Fill(ref List<IValuablePieceOfPaper> bankrupts) // фабричный метод?
+        public void Fill(ref List<IValuablePieceOfPaper> bankrupts, Player player) // фабричный метод?
         {
             RenewAll(ref bankrupts);
             MarketPapers.Clear();
@@ -56,7 +68,7 @@ namespace WpfApp2
             {
                 if (CompanyNames[i].isTaken)
                 {
-                    var stock = Player.Ownings.Find(a => a.Name == CompanyNames[i].Value);
+                    var stock = Find(CompanyNames[i].Value, player.Ownings);
                     if (stock == null)
                         deplorables.Add(CompanyNames[i].Value);
                     else
@@ -70,7 +82,7 @@ namespace WpfApp2
             }
             ChangeList(BankNames);
             ChangeList(CountryNames);
-            Random random = new Random(Player.Turn + 5000 + MarketPapers.Count + (int)Player.InvestedMoney);
+            Random random = new Random(Player.Random + 5000 + MarketPapers.Count + (int)player.InvestedMoney);
             while (MarketPapers.Count < 45)
             {
                 int choice = random.Next(0, 3);
