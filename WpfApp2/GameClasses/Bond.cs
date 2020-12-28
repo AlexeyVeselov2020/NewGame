@@ -18,6 +18,7 @@ namespace WpfApp2
         public double TotalValue { get; set; }
         public double Percent { get; set; }
         public bool Bankrupt { get; set; }
+        public double Change { get; set; }
 
         public Bond(Market market)
         {
@@ -71,7 +72,9 @@ namespace WpfApp2
         }
         public void Renew(Market market)
         {
+            double lastQuantity = Quantity;
             Quantity = Quantity * ((100 + Percent) / 100);
+            Change = Quantity - lastQuantity;
             TotalValue = Quantity;
         }
     }

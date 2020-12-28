@@ -20,7 +20,7 @@
                 </Border.Effect>
                 <TextBlock Text="Financier Simulator" TextAlignment="Center" FontSize="23" Margin="10"/>
             </Border>
-            <ComboBox x:Name="complexityBox" materialDesign:HintAssist.Hint="Выберите сложность" MaxHeight="40" MaxWidth="300" Margin="60,0,60,0" Background="Azure"/>
+            <ComboBox x:Name="complexityBox" materialDesign:HintAssist.Hint="Choose complexity" MaxHeight="40" MaxWidth="300" Margin="60,0,60,0" Background="Azure"/>
             <Button x:Name="hintButton" Content="Rules" Foreground="Black" HorizontalAlignment="Left" MaxHeight="40" MaxWidth="300" Background="Azure" Margin="145,80,0,0" Width="100" Click="HintButton_Click"/>
             <Button x:Name="startButton" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="150" MinHeight="40" MinWidth="150" MaxHeight="40" Margin="60,10,60,0" Click="StartButton_Click" />
         </StackPanel>

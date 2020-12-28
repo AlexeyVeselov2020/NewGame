@@ -87,15 +87,22 @@ namespace WpfApp2
 
         private void SellButton_Click(object sender, RoutedEventArgs e)
         {
-            var quantitytosell = double.Parse(quantitytobuyBox.Text);
-            if (quantitytosell <= double.Parse(quantityBox.Text))
+            string text = quantitytobuyBox.Text;
+            Regex r = new Regex(@"[\d]+");
+            if (r.Match(text).Success)
             {
-                previousWindow.player.Sell(correntPaper, quantitytosell);
-                this.Close();
-                previousWindow.IsEnabled = true;
+                var quantitytosell = double.Parse(quantitytobuyBox.Text);
+                if (quantitytosell <= double.Parse(quantityBox.Text))
+                {
+                    previousWindow.player.Sell(correntPaper, quantitytosell);
+                    this.Close();
+                    previousWindow.IsEnabled = true;
+                }
+                else
+                    MessageBox.Show("You don't have enough securities.");
             }
             else
-                MessageBox.Show("You don't have enough securities.");
+                MessageBox.Show("You entered an incorrect quantity value");
         }
 
         private void SellBuyWindow_Closing(object sender, EventArgs e)

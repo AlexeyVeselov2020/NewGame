@@ -20,6 +20,7 @@ namespace WpfApp2
         public double Percent { get; set; }
         public double BankruptcyProbability { get; set; }
         public bool Bankrupt { get; set; }
+        public double Change { get; set; }
 
         public Deposit(Market market)
         {
@@ -87,7 +88,9 @@ namespace WpfApp2
         public void Renew(Market market)
         {
             amount++;
+            double lastQuantity = Quantity;
             Quantity = Quantity * ((100 + Percent) / 100);
+            Change = Quantity - lastQuantity;
             TotalValue = Quantity;
             var random = new Random(Player.Random + 1000 + market.MarketPapers.Count + amount);
             int result = random.Next(1, 100);

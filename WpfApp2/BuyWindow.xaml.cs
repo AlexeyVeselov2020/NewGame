@@ -87,15 +87,22 @@ namespace WpfApp2
 
         private void BuyButton_Click(object sender, RoutedEventArgs e)
         {
-            var quantitytobuy = double.Parse(quantitytobuyBox.Text);
-            if (quantitytobuy <= double.Parse(quantityBox.Text))
+            string text = quantitytobuyBox.Text;
+            Regex r = new Regex(@"[\d]+");
+            if (r.Match(text).Success)
             {
-                previousWindow.player.Buy(correntPaper, quantitytobuy);
-                this.Close();
-                previousWindow.IsEnabled = true;
+                var quantitytobuy = double.Parse(quantitytobuyBox.Text);
+                if (quantitytobuy <= double.Parse(quantityBox.Text))
+                {
+                    previousWindow.player.Buy(correntPaper, quantitytobuy);
+                    this.Close();
+                    previousWindow.IsEnabled = true;
+                }
+                else
+                    MessageBox.Show("You don't have enough funds.");
             }
             else
-                MessageBox.Show("You don't have enough funds.");
+                MessageBox.Show("You entered an incorrect quantity value");
         }
 
         private void SellBuyWindow_Closing(object sender, EventArgs e)

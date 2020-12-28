@@ -12,6 +12,7 @@ namespace WpfApp2
         double Price { get; set; }
         double TotalValue { get; set; }
         string Name { get; set; }
+        double Change { get; set; }
         string ToString();
         void Renew(Market market);
 
@@ -29,6 +30,7 @@ namespace WpfApp2
         public double Price { get; set; }
         public double Quantity { get; set; }
         public double TotalValue { get; set; }
+        public double Change { get; set; }
         public bool Bankrupt { get; set; }
         public Stock(Market market)
         {
@@ -40,7 +42,7 @@ namespace WpfApp2
             market.CompanyNames.RemoveAt(index);
             market.CompanyNames.Add(new Name(Name, true));
             Quantity = random.Next((int)minQuantity, (int)maxQuantity);
-            Price = Math.Round(Multiplication / Quantity,2);
+            Price = Math.Round(Multiplication / Quantity, 2);
             TotalValue = Quantity * Price;
             Bankrupt = false;
             DifficultyOptions();
@@ -96,7 +98,9 @@ namespace WpfApp2
             {
                 var random = new Random(Player.Random + 4000 + amount);
                 Quantity = random.Next((int)minQuantity, (int)maxQuantity);
+                double lastPrice = Price;
                 Price = Math.Round(Multiplication / Quantity, 2);
+                Change = Price - lastPrice;
                 TotalValue = Quantity * Price;
             }
             else
@@ -104,6 +108,7 @@ namespace WpfApp2
         }
         private void SearchForMarketPrice(Market market)
         {
+            double lastPrice = Price;
             foreach (var s in market.MarketPapers)
             {
                 if (s.Name == Name)
@@ -112,6 +117,7 @@ namespace WpfApp2
                     break;
                 }
             }
+            Change = Price - lastPrice;
             TotalValue = Quantity * Price;
         }
     }
