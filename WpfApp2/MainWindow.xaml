@@ -220,6 +220,7 @@
                 <TextBlock x:Name="goalTextBlock" FontSize="17" HorizontalAlignment="Left" Height="33" Margin="5,0,0,0" VerticalAlignment="Top" Width="140" Text="{Binding Path=Goal,UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Border>
-        <Button x:Name="endturnButton" Content="End turn" HorizontalAlignment="Left" Height="76" Margin="739,363,0,0" VerticalAlignment="Top" Width="131" Click="EndturnButton_Click"/>
+        <Button x:Name="endturnButton" Content="End turn" HorizontalAlignment="Left" Height="76" Margin="720,363,0,0" VerticalAlignment="Top" Width="152" Click="EndturnButton_Click"/>
+        <Button Content="Restart" HorizontalAlignment="Left" Height="31" Margin="756,310,0,0" VerticalAlignment="Top" Width="84" Click="Button_Click"/>
     </Grid>
 </Window>

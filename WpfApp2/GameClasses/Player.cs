@@ -169,7 +169,7 @@ namespace WpfApp2
             paper.Quantity -= quantity;
             if (Money >= quantity * paper.Price)
             {
-                Money -= Math.Round(quantity * paper.Price,2);
+                Money = Math.Round(Money-quantity * paper.Price,2);
                 InvestedMoney += quantity * paper.Price;
                 if (!ownings.Contains(Find(paper.Name, ownings)))
                     ownings.Add(paper.CreateAPair(quantity)); //incapsulated

@@ -79,6 +79,19 @@ namespace WpfApp2
         {
             string answer = player.RenewAll();
             MessageBox.Show(answer);
+            if(player.Money<0 || player.Money>=player.Goal)
+            {
+                var sw = new StartWindow();
+                this.Close();
+                sw.Show();
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var sw = new StartWindow();
+            this.Close();
+            sw.Show();
         }
     }
 }
