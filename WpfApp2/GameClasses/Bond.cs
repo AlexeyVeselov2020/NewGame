@@ -3,22 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace WpfApp2
 {
-    public class Bond : IValuablePieceOfPaper
+    public class Bond : IValuablePieceOfPaper,INotifyPropertyChanged
     {
         public double MaxQuantity { get; set; }
         private static int amount = 0;
         private const double minPercent = 1;
         private static double maxPercent = 7;
+        private double change;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
         public string Name { get; set; }
         public double Quantity { get; set; }
         public double Price { get; set; }
         public double TotalValue { get; set; }
         public double Percent { get; set; }
         public bool Bankrupt { get; set; }
-        public double Change { get; set; }
+        public double Change
+        {
+            get { return change; }
+            set
+            {
+                change = value;
+                RaisePropertyChanged("Change");
+            }
+        }
 
         public Bond(Market market)
         {
@@ -73,8 +90,8 @@ namespace WpfApp2
         public void Renew(Market market)
         {
             double lastQuantity = Quantity;
-            Quantity = Quantity * ((100 + Percent) / 100);
-            Change = Quantity - lastQuantity;
+            Quantity = Math.Round(Quantity * ((100 + Percent) / 100),2);
+            Change = Math.Round(Quantity - lastQuantity,2);
             TotalValue = Quantity;
         }
     }

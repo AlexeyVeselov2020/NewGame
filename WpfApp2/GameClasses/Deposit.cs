@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace WpfApp2
 {
-    public class Deposit : IValuablePieceOfPaper
+    public class Deposit : IValuablePieceOfPaper, INotifyPropertyChanged
     {
         private static int amount;
         public double MaxQuantity { get; set; }
         private static double minBankruptcyProbability = 1;
         private const double maxBankruptcyProbability = 10;
         public const double MinPercent = 5;
+        private double change;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public string Name { get; set; }
         public double Quantity { get; set; }
         public double Price { get; set; }
@@ -20,7 +30,15 @@ namespace WpfApp2
         public double Percent { get; set; }
         public double BankruptcyProbability { get; set; }
         public bool Bankrupt { get; set; }
-        public double Change { get; set; }
+        public double Change
+        { 
+            get { return change; }
+            set
+            {
+                change = value;
+                RaisePropertyChanged("Change");
+            }
+        }
 
         public Deposit(Market market)
         {
@@ -89,7 +107,7 @@ namespace WpfApp2
         {
             amount++;
             double lastQuantity = Quantity;
-            Quantity = Quantity * ((100 + Percent) / 100);
+            Quantity = Math.Round(Quantity * ((100 + Percent) / 100),2);
             Change = Quantity - lastQuantity;
             TotalValue = Quantity;
             var random = new Random(Player.Random + 1000 + market.MarketPapers.Count + amount);

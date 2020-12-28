@@ -29,9 +29,10 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                         <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal">
-                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="160" TextAlignment="Left" TextWrapping="Wrap"><InlineUIContainer>
-                                                    <ContentPresenter/>
-                                                </InlineUIContainer></TextBlock>
+                                            <StackPanel Orientation="Vertical" Background="{TemplateBinding Background}">
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="160" TextAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0" Width="160" TextAlignment="Left" TextWrapping="Wrap" Text="{Binding StringFormat=Change: {0}, Path=Change, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </StackPanel>
                                             <Button Content="Sell" Foreground="White" Focusable="False" Margin="0,5,5,5" MaxHeight="30" Click="SellClick">
                                                 <Button.Style>
                                                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">

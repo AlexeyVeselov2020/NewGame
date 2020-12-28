@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace WpfApp2
 {
@@ -20,18 +21,35 @@ namespace WpfApp2
         IValuablePieceOfPaper CreateAPair(double quantity);
     }
 
-    public class Stock : IValuablePieceOfPaper
+    public class Stock : IValuablePieceOfPaper, INotifyPropertyChanged
     {
         private static int amount = 0;
         private static double minQuantity = 500;
         private static double maxQuantity = 10000;
         const double Multiplication = 10000000;
+        private double change;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string Name { get; set; }
         public double Price { get; set; }
         public double Quantity { get; set; }
         public double TotalValue { get; set; }
-        public double Change { get; set; }
+        public double Change
+        {
+            get { return change; }
+            set
+            {
+                change = value;
+                RaisePropertyChanged("Change");
+            }
+        }
         public bool Bankrupt { get; set; }
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
         public Stock(Market market)
         {
             amount++;
@@ -80,6 +98,7 @@ namespace WpfApp2
             Name = name;
             Quantity = quantity;
             Price = price;
+            Change = 0;
             TotalValue = Quantity * Price;
             Bankrupt = false;
         }

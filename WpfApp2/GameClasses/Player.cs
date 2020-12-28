@@ -197,7 +197,6 @@ namespace WpfApp2
                 ownings[i].Quantity -= quantity;
                 Money += quantity * ownings[i].Price;
                 InvestedMoney -= quantity * ownings[i].Price;
-                OurMarket.MarketPapers.Add(ownings[i].CreateAPair(quantity));
             }
         }
         public string RenewAll() // End Turn Button
@@ -207,8 +206,8 @@ namespace WpfApp2
             {
                 // W A S T E D
                 ownings.Clear();
-                Money = -1000000000;
-                InvestedMoney = -1000000000;
+                money = 0;
+                investedMoney = 0;
                 var answer = new StringBuilder("You have lost. Try again.\r\n  In real life maybe...");
                 return answer.ToString();
             }
@@ -216,8 +215,11 @@ namespace WpfApp2
                 if (Money >= goal)
                 {
                     // V I C T O R Y
+                    ownings.Clear();
+                    money = 0;
+                    investedMoney = 0;
                     var answer = new StringBuilder("Congratulations!!! You have won.\r\n P.S. \r\nIt's just pure luck.");
-                    return answer.ToString();
+                        return answer.ToString();
                 }
                 else
                 {
